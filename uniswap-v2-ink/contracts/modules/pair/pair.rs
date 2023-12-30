@@ -2,17 +2,21 @@
 
 
 
-
-
 #[openbrush::implementation(PSP22, PSP22Permit, Nonces, PSP22Mintable, Ownable, PSP22Metadata)]
 #[openbrush::contract]
-pub mod psp22_permit {
-    use openbrush::{traits::Storage, modifiers};
+mod factory {
+
+
+    use global::providers::data::pair::FactoryStorage;
+    // use global::providers::{data::contract_2::Contract2Storage, deployables::contract_2::Contract2Impl};
+    // use global::controllers::contract_2::contract2controller_external::Contract2Controller;
+    use openbrush::{traits::Storage, modifiers, contracts::reentrancy_guard};
+
 
 
     #[ink(storage)]
     #[derive(Default, Storage)]
-    pub struct PSP22Lp {
+    pub struct Factory {
         #[storage_field]
         psp22: psp22::Data,
         #[storage_field]
@@ -23,20 +27,33 @@ pub mod psp22_permit {
         nonces: nonces::Data,
         #[storage_field]
         psp22_permit: psp22::extensions::permit::Data,
-        
+        #[storage_field]
+        pub guard: reentrancy_guard::Data,
+        #[storage_field]
+        pub pool_state: FactoryStorage,
     }
-
 
     #[default_impl(PSP22Mintable)]
     #[modifiers(only_owner)]
     fn mint(&mut self) {}
 
 
+    impl  Contract2Impl for Contract2 {}
 
 
+    impl Contract2Controller for Contract2 {
+        #[ink(message)]
+        fn flip(&mut self) {
+           Contract2Impl::flip(self);
+        }
 
+        #[ink(message)]
+        fn get(&self) -> bool {
+            Contract2Impl::get(self)
+        }
+    }
 
-    impl PSP22Lp {
+    impl Factory {
         #[ink(constructor)]
         pub fn new(total_supply: Balance, name: Option<String>, symbol: Option<String>, decimal: u8) -> Self {
             let mut instance = Self::default();
@@ -61,4 +78,5 @@ pub mod psp22_permit {
             psp22::Internal::_burn_from(self, caller, _amount)
         }
     }
+
 }

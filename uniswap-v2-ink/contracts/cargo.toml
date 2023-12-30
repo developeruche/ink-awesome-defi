@@ -1,7 +1,7 @@
 [package]
 name = "global"
 version = "0.1.0"
-authors = ["[your_name] <[your_email]>"]
+authors = ["developeruche <developeruche@gmail.com>"]
 edition = "2021"
 
 [dependencies]
@@ -24,6 +24,8 @@ std = [
     "ink/std",
     "scale/std",
     "scale-info/std",
+
+      "openbrush/std",
 ]
 ink-as-dependency = []
 e2e-tests = []

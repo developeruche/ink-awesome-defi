@@ -1,7 +1,7 @@
 [package]
-name = "contract_2"
+name = "pair"
 version = "0.1.0"
-authors = ["[your_name] <[your_email]>"]
+authors = ["developeruche <developeruche@gmail.com>"]
 edition = "2021"
 
 [dependencies]
@@ -18,7 +18,7 @@ scale-info = { version = "2.6", default-features = false, features = ["derive"],
 ink_e2e = "4.2.0"
 
 [lib]
-path = "contract_2.rs"
+path = "pair.rs"
 
 [features]
 default = ["std"]

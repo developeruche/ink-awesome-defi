@@ -1,5 +1,6 @@
 
 
+
 #[openbrush::wrapper]
 pub type APoolRef = dyn Contract1Controller ;
 

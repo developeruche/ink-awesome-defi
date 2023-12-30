@@ -939,7 +939,9 @@ dependencies = [
  "ink",
  "ink_e2e",
  "openbrush",
+ "pair",
  "parity-scale-codec",
+ "psp22_lp",
  "scale-info",
 ]
 
@@ -2894,6 +2896,7 @@ version = "0.1.0"
 source = "git+https://github.com/727-Ventures/obce?branch=polkadot-v0.9.37#d452f6eda1bc1ecb36e7e332d61529ad440d5a89"
 dependencies = [
  "ink",
+ "ink_engine",
  "obce-macro",
  "parity-scale-codec",
  "scale-info",
@@ -2984,6 +2987,7 @@ dependencies = [
  "openbrush_lang",
  "pallet-assets-chain-extension",
  "parity-scale-codec",
+ "scale-info",
 ]
 
 [[package]]
@@ -3044,6 +3048,16 @@ checksum = "0ae859aa07428ca9a929b936690f8b12dc5f11dd8c6992a18ca93919f28bc177"
 dependencies = [
  "libc",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "pair"
+version = "0.1.0"
+dependencies = [
+ "global",
+ "ink",
+ "openbrush",
+ "parity-scale-codec",
 ]
 
 [[package]]
@@ -3363,6 +3377,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5787f7cda34e3033a72192c018bc5883100330f362ef279a8cbccfce8bb4e874"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "psp22_lp"
+version = "0.1.0"
+dependencies = [
+ "global",
+ "ink",
+ "openbrush",
+ "parity-scale-codec",
 ]
 
 [[package]]
