@@ -1,6 +1,5 @@
-use openbrush::{ traits::{ AccountId, Balance, Storage } };
-use ink::{ storage::{ Mapping, traits::StorageLayout } };
-// use crate::providers::common::database::*;
+use openbrush::traits::{ AccountId, Balance, Storage };
+
 
 #[derive(Debug)]
 #[openbrush::storage_item(FACTORY_STORAGE_LOCATION)]
@@ -21,7 +20,7 @@ pub struct FactoryStorage {
 impl  Default for FactoryStorage {
     fn default() -> Self {
         Self { 
-            minimum_liquidity: Balance::from(1000),
+            minimum_liquidity: Balance::from(1000u32),
             factory: AccountId::from([0u8; 32]),
             token_0: AccountId::from([0u8; 32]),
             token_1: AccountId::from([0u8; 32]),
