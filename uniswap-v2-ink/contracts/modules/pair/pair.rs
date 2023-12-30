@@ -7,7 +7,7 @@
 mod factory {
 
 
-    use global::providers::data::pair::FactoryStorage;
+    use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     // use global::providers::{data::contract_2::Contract2Storage, deployables::contract_2::Contract2Impl};
     // use global::controllers::contract_2::contract2controller_external::Contract2Controller;
     use openbrush::{traits::Storage, modifiers, contracts::reentrancy_guard};
@@ -16,7 +16,7 @@ mod factory {
 
     #[ink(storage)]
     #[derive(Default, Storage)]
-    pub struct Factory {
+    pub struct Pair {
         #[storage_field]
         psp22: psp22::Data,
         #[storage_field]
@@ -30,7 +30,7 @@ mod factory {
         #[storage_field]
         pub guard: reentrancy_guard::Data,
         #[storage_field]
-        pub pool_state: FactoryStorage,
+        pub pool_state: PairStorage,
     }
 
     #[default_impl(PSP22Mintable)]
@@ -38,7 +38,7 @@ mod factory {
     fn mint(&mut self) {}
 
 
-    impl  Contract2Impl for Contract2 {}
+    impl  PairImpl for Pair {}
 
 
     impl Contract2Controller for Contract2 {
@@ -53,7 +53,7 @@ mod factory {
         }
     }
 
-    impl Factory {
+    impl Pair {
         #[ink(constructor)]
         pub fn new(total_supply: Balance, name: Option<String>, symbol: Option<String>, decimal: u8) -> Self {
             let mut instance = Self::default();
