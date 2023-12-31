@@ -1,4 +1,5 @@
 
+use ink::primitives::AccountId;
 use openbrush::{traits::Storage, contracts::psp22::{psp22, extensions::metadata::PSP22MetadataImpl}};
 use crate::providers::data::pair::PairStorage;
 
@@ -8,16 +9,10 @@ pub trait PairImpl:
     PSP22MetadataImpl +
     psp22::Internal + 
 {
-
-        // fn flip(&mut self) {
-            
-        //     let mut state = *self.data::<Contract2Storage>();
-        //     state.value = !state.value;
-        // }
-
-        // fn get(&self) -> bool {
-
-        //     let state = *self.data::<Contract2Storage>();
-        //     state.value
-        // }
+    fn initialize(&mut self,  _token0: AccountId, _token1: AccountId) {
+    
+        let state = self.data::<PairStorage>();
+        state.token_0 = _token0;
+        state.token_1 = _token1;
+    }
 }
