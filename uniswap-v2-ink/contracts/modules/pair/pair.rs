@@ -10,8 +10,9 @@ mod factory {
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     // use global::providers::{data::contract_2::Contract2Storage, deployables::contract_2::Contract2Impl};
     // use global::controllers::contract_2::contract2controller_external::Contract2Controller;
+    use global::controllers::pair::PairController;
     use openbrush::{traits::Storage, modifiers, contracts::reentrancy_guard};
-
+    use global::controllers::pair::paircontroller_external;
 
 
     #[ink(storage)]
@@ -41,17 +42,13 @@ mod factory {
     impl  PairImpl for Pair {}
 
 
-    impl Contract2Controller for Contract2 {
+    impl PairController for Pair {
         #[ink(message)]
-        fn flip(&mut self) {
-           Contract2Impl::flip(self);
-        }
-
-        #[ink(message)]
-        fn get(&self) -> bool {
-            Contract2Impl::get(self)
+        fn initialize(&mut self, _token0: AccountId, _token1: AccountId) {
+           PairImpl::initialize(self, _token0, _token1);
         }
     }
+
 
     impl Pair {
         #[ink(constructor)]
