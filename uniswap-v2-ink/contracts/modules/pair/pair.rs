@@ -4,8 +4,7 @@
 
 #[openbrush::implementation(PSP22, PSP22Permit, Nonces, PSP22Mintable, Ownable, PSP22Metadata)]
 #[openbrush::contract]
-mod factory {
-
+mod pair {
 
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     use global::controllers::pair::PairController;
@@ -13,6 +12,10 @@ mod factory {
     use global::controllers::pair::paircontroller_external;
 
 
+
+    // =========================================
+    // Storage
+    // =========================================
     #[ink(storage)]
     #[derive(Default, Storage)]
     pub struct Pair {
@@ -32,12 +35,62 @@ mod factory {
         pub pool_state: PairStorage,
     }
 
+
+    // =========================================
+    // Overriding PSP22 Functions
+    // =========================================
     #[default_impl(PSP22Mintable)]
     #[modifiers(only_owner)]
     fn mint(&mut self) {}
 
 
+
+    // =========================================
+    // Events 
+    // =========================================
+    #[ink(event)]
+    pub struct Mint {
+        #[ink(topic)]
+        pub sender: AccountId,
+        pub amount1: Balance,
+        pub amount2: Balance,
+    }
+
+    #[ink(event)]
+    pub struct Burn {
+        #[ink(topic)]
+        pub sender: AccountId,
+        pub amount1: Balance,
+        pub amount2: Balance,
+        #[ink(topic)]
+        pub to: AccountId,
+    }
+
+    #[ink(event)]
+    pub struct Swap {
+        #[ink(topic)]
+        pub sender: AccountId,
+        pub amount0_in: Balance,
+        pub amount1_in: Balance,
+        pub amount0_out: Balance,
+        pub amount1_out: Balance,
+        #[ink(topic)]
+        pub to: AccountId,
+    }
+
+    #[ink(event)]
+    pub struct Sync {
+        pub reserve0: Balance,
+        pub reserve1: Balance,
+    }
+
+
+
+
     impl  PairImpl for Pair {}
+
+
+
 
 
     impl PairController for Pair {
@@ -61,7 +114,6 @@ mod factory {
             ownable::Internal::_init_with_owner(&mut instance, Self::env().caller());
             psp22::Internal::_mint_to(&mut instance, caller, total_supply).expect("Should mint total_supply");
             
-
             instance
         }
 
