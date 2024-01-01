@@ -8,8 +8,6 @@ mod factory {
 
 
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
-    // use global::providers::{data::contract_2::Contract2Storage, deployables::contract_2::Contract2Impl};
-    // use global::controllers::contract_2::contract2controller_external::Contract2Controller;
     use global::controllers::pair::PairController;
     use openbrush::{traits::Storage, modifiers, contracts::reentrancy_guard};
     use global::controllers::pair::paircontroller_external;
