@@ -7,7 +7,7 @@ pub trait PairImpl:
     Storage<PairStorage> +
     Storage<psp22::Data> +
     PSP22MetadataImpl +
-    psp22::Internal + 
+    // psp22::Internal + 
 {
     fn initialize(&mut self,  _token0: AccountId, _token1: AccountId) {
     

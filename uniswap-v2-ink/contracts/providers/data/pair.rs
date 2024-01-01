@@ -17,7 +17,7 @@ pub struct PairStorage {
 }
 
 
-impl  Default for PairStorage {
+impl Default for PairStorage {
     fn default() -> Self {
         Self { 
             minimum_liquidity: Balance::from(1000u32),
