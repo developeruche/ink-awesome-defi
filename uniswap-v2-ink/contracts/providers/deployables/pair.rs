@@ -55,11 +55,11 @@ pub trait PairImpl:
     }
 
     fn mint(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
-        let mut state = *self.data::<PairStorage>();
-        let caller = Self::env().caller();
+        let state = *self.data::<PairStorage>();
+        let this = Self::env().account_id();
         let (reserve_0, reserve_1, minimum_liquidity) = (state.reserve_0, state.reserve_1, state.minimum_liquidity);
-        let balance0 = PSP22Ref::balance_of(&state.token_0, caller);
-        let balance1 = PSP22Ref::balance_of(&state.token_1, caller);
+        let balance0 = PSP22Ref::balance_of(&state.token_0, this);
+        let balance1 = PSP22Ref::balance_of(&state.token_1, this);
         let amount0 = balance0 - reserve_0;
         let amount1 = balance1 - reserve_1;
         let liqudity: Balance;
@@ -84,13 +84,96 @@ pub trait PairImpl:
         self.internal_update(balance0, balance1)?;
 
         if fee_on.unwrap_or(false) {
-            self.data::<PairStorage>().k_last = (reserve_0 as u128) * (reserve_1 as u128);
+            self.data::<PairStorage>().k_last = (self.data::<PairStorage>().reserve_0 as u128) * (self.data::<PairStorage>().reserve_1 as u128);
         }
 
         Ok(())
     }
 
-    
+
+    fn burn(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
+        let state = *self.data::<PairStorage>();
+        let this = Self::env().account_id();
+        let (token_0, token_1) = (state.token_0, state.token_1);
+        let mut balance0 = PSP22Ref::balance_of(&token_0, this);
+        let mut balance1 = PSP22Ref::balance_of(&token_1, this);
+        let liquidity = self._balance_of(&this);
+
+        let fee_on = self.internal_mint_fee();
+        let _total_supply = self._total_supply();
+
+        let amount0 = liquidity * balance0 / _total_supply;
+        let amount1 = liquidity * balance1 / _total_supply;
+
+        if amount0 == 0 || amount1 == 0 {
+            return Err(UniswapV2Errors::InsufficientLiquidityBurned);
+        }
+
+        self._burn_from(this, liquidity)?;
+
+        PSP22Ref::transfer(&this, _to, amount0, Vec::<u8>::new())?;
+        PSP22Ref::transfer(&this, _to, amount1, Vec::<u8>::new())?;
+
+        balance0 = PSP22Ref::balance_of(&token_0, this);
+        balance1 = PSP22Ref::balance_of(&token_1, this);
+
+        if fee_on.unwrap_or(false) {
+            self.data::<PairStorage>().k_last = (self.data::<PairStorage>().reserve_0 as u128) * (self.data::<PairStorage>().reserve_1 as u128);
+        }
+
+        self.internal_update(balance0, balance1)?;
+
+        Ok(())
+    }
+
+
+
+    fn swap(&mut self, _amount0: Balance, _amount1: Balance, _to: AccountId) -> Result<(), UniswapV2Errors> {
+        let state = *self.data::<PairStorage>();
+        let this = Self::env().account_id();
+
+        if _amount0 == 0 && _amount1 == 0 {
+            return Err(UniswapV2Errors::InsufficientAmountOut);
+        }
+
+        let (reserve_0, reserve_1, token_0, token_1) = (state.reserve_0, state.reserve_1, state.token_0, state.token_1);
+
+        if _to == token_0 || _to == token_1 {
+            return Err(UniswapV2Errors::InvalidToAddress);
+        }
+
+        PSP22Ref::transfer(&token_0, _to, _amount0, Vec::<u8>::new())?;
+        PSP22Ref::transfer(&token_1, _to, _amount1, Vec::<u8>::new())?;
+
+        let balance0 = PSP22Ref::balance_of(&token_0, this);
+        let balance1 = PSP22Ref::balance_of(&token_1, this);
+
+        let amount0_in = if balance0 > reserve_0 - _amount0 {
+            balance0 - (reserve_0 - _amount0)
+        } else {
+            0u128
+        };
+
+        let amount1_in = if balance1 > reserve_1 - _amount1 {
+            balance1 - (reserve_1 - _amount1)
+        } else {
+            0u128
+        };
+
+        if amount0_in == 0 && amount1_in == 0 {
+            return Err(UniswapV2Errors::InsufficientAmountOut);
+        }
+
+        let balance0adjusted = balance0 * 1000 - amount0_in * 3;
+        let balance1adjusted = balance1 * 1000 - amount1_in * 3;
+
+        if (balance0adjusted * balance1adjusted) < (reserve_0 * reserve_1) * 1000u128.pow(2) {
+            return Err(UniswapV2Errors::ConstantProductError);
+        }
+
+        self.internal_update(balance0, balance1)?;
+        Ok(())
+    }
 
 
 

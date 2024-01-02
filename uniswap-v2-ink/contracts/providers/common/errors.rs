@@ -18,6 +18,10 @@ pub enum UniswapV2Errors {
     OwnableError(OwnableError),
     ReentrancyGuardError(ReentrancyGuardError),
     InsufficientLiquidityMinted,
+    InsufficientLiquidityBurned,
+    InsufficientAmountOut,
+    InvalidToAddress,
+    ConstantProductError,
 }
 
 
