@@ -176,6 +176,26 @@ pub trait PairImpl:
     }
 
 
+    fn skim(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
+        let state = *self.data::<PairStorage>();
+        let this = Self::env().account_id();
+        let (token_0, token_1) = (state.token_0, state.token_1);
+        let balance0 = PSP22Ref::balance_of(&token_0, this);
+        let balance1 = PSP22Ref::balance_of(&token_1, this);
+        let amount0 = balance0 - state.reserve_0;
+        let amount1 = balance1 - state.reserve_1;
+
+        if amount0 > 0 {
+            PSP22Ref::transfer(&token_0, _to, amount0, Vec::<u8>::new())?;
+        }
+
+        if amount1 > 0 {
+            PSP22Ref::transfer(&token_1, _to, amount1, Vec::<u8>::new())?;
+        }
+
+        Ok(())
+    }
+
 
 
 
@@ -231,8 +251,6 @@ pub trait PairImpl:
 
 
         // emit the sync event
-
-
         Ok(())
     }
 
