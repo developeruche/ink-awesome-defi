@@ -96,15 +96,20 @@ mod pair {
         // =========================================
         // View Functions
         // =========================================
+
+
+        // =========================================
+        // Write Functions
+        // =========================================
         #[ink(message)]
         fn initialize(&mut self, _token0: AccountId, _token1: AccountId) {
            PairImpl::initialize(self, _token0, _token1);
         }
 
-        
-        // =========================================
-        // Write Functions
-        // =========================================
+        #[ink(message)]
+        fn mint(&mut self, _to: AccountId) {
+           PairImpl::mint(self, _to);
+        }
     }
 
 
