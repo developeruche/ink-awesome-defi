@@ -6,6 +6,7 @@
 #[openbrush::contract]
 mod pair {
 
+    use global::providers::common::errors::UniswapV2Errors;
     use global::providers::data::pair::set_factory;
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     use global::controllers::pair::PairController;
@@ -96,6 +97,37 @@ mod pair {
         // =========================================
         // View Functions
         // =========================================
+        #[ink(message)]
+        fn token_0(&self) -> AccountId {
+            PairImpl::token_0(self)
+        }
+
+        #[ink(message)]
+        fn token_1(&self) -> AccountId {
+            PairImpl::token_1(self)
+        }
+
+        #[ink(message)]
+        fn factory(&self) -> AccountId {
+            PairImpl::factory(self)
+        }
+
+        #[ink(message)]
+        fn price0_cumulative_last(&self) -> u128 {
+            PairImpl::price0_cumulative_last(self)
+        }
+
+        #[ink(message)]
+        fn price1_cumulative_last(&self) -> u128 {
+            PairImpl::price1_cumulative_last(self)
+        }
+
+        #[ink(message)]
+        fn get_reserves(&self) -> (u128, u128, u128) {
+            PairImpl::get_reserves(self)
+        }
+
+        
 
 
         // =========================================
@@ -107,8 +139,28 @@ mod pair {
         }
 
         #[ink(message)]
-        fn mint(&mut self, _to: AccountId) {
-           PairImpl::mint(self, _to);
+        fn mint(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
+           PairImpl::mint(self, _to)
+        }
+
+        #[ink(message)]
+        fn burn(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
+           PairImpl::burn(self, _to)
+        }
+
+        #[ink(message)]
+        fn swap(&mut self, _amount0: Balance, _amount1: Balance, _to: AccountId)  -> Result<(), UniswapV2Errors> {
+           PairImpl::swap(self, _amount0, _amount1, _to)
+        }
+
+        #[ink(message)]
+        fn skim(&mut self, _to: AccountId)  -> Result<(), UniswapV2Errors> {
+           PairImpl::skim(self, _to)
+        }
+
+        #[ink(message)]
+        fn sync(&mut self) -> Result<(), UniswapV2Errors> {
+           PairImpl::sync(self)
         }
     }
 
