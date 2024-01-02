@@ -1,10 +1,9 @@
-use openbrush::{
+use openbrush::
     contracts::traits::{
         ownable::*,
         psp22::PSP22Error,
-        errors::{ ReentrancyGuardError },
-    },
-};
+        errors::ReentrancyGuardError,
+    };
 
 
 
