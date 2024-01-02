@@ -2,13 +2,14 @@
 
 
 
-#[openbrush::implementation(PSP22, PSP22Permit, Nonces, PSP22Mintable, Ownable, PSP22Metadata)]
+#[openbrush::implementation(PSP22, PSP22Permit, Nonces, Ownable, PSP22Metadata)]
 #[openbrush::contract]
 mod pair {
 
+    use global::providers::data::pair::set_factory;
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     use global::controllers::pair::PairController;
-    use openbrush::{traits::Storage, modifiers, contracts::reentrancy_guard};
+    use openbrush::{traits::Storage, contracts::reentrancy_guard};
     use global::controllers::pair::paircontroller_external;
 
 
@@ -39,9 +40,7 @@ mod pair {
     // =========================================
     // Overriding PSP22 Functions
     // =========================================
-    #[default_impl(PSP22Mintable)]
-    #[modifiers(only_owner)]
-    fn mint(&mut self) {}
+
 
 
 
@@ -103,7 +102,7 @@ mod pair {
 
     impl Pair {
         #[ink(constructor)]
-        pub fn new(total_supply: Balance, name: Option<String>, symbol: Option<String>, decimal: u8) -> Self {
+        pub fn new(total_supply: Balance, name: Option<String>, symbol: Option<String>, decimal: u8, factory: AccountId) -> Self {
             let mut instance = Self::default();
             let caller = instance.env().caller();
 
@@ -113,6 +112,8 @@ mod pair {
 
             ownable::Internal::_init_with_owner(&mut instance, Self::env().caller());
             psp22::Internal::_mint_to(&mut instance, caller, total_supply).expect("Should mint total_supply");
+
+            set_factory(&mut instance, factory);
             
             instance
         }

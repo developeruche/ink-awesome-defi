@@ -1,7 +1,7 @@
 use openbrush::traits::{ AccountId, Balance, Storage };
 use ink::{ storage::{ Mapping, traits::StorageLayout } };
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 #[openbrush::storage_item(PAIR_STORAGE_LOCATION)]
 pub struct PairStorage {
     pub minimum_liquidity: Balance,

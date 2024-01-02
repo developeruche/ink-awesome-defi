@@ -17,6 +17,7 @@ pub enum UniswapV2Errors {
     PSP22Error(PSP22Error),
     OwnableError(OwnableError),
     ReentrancyGuardError(ReentrancyGuardError),
+    InsufficientLiquidityMinted,
 }
 
 
