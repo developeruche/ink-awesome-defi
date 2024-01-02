@@ -93,10 +93,18 @@ mod pair {
 
 
     impl PairController for Pair {
+        // =========================================
+        // View Functions
+        // =========================================
         #[ink(message)]
         fn initialize(&mut self, _token0: AccountId, _token1: AccountId) {
            PairImpl::initialize(self, _token0, _token1);
         }
+
+        
+        // =========================================
+        // Write Functions
+        // =========================================
     }
 
 
@@ -116,14 +124,6 @@ mod pair {
             set_factory(&mut instance, factory);
             
             instance
-        }
-
-
-
-        #[ink(message)]
-        pub fn burn(&mut self, _amount: Balance) -> Result<(), PSP22Error> {
-            let caller = self.env().caller();
-            psp22::Internal::_burn_from(self, caller, _amount)
         }
     }
 

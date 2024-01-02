@@ -197,6 +197,16 @@ pub trait PairImpl:
     }
 
 
+    fn sync(&mut self) -> Result<(), UniswapV2Errors> {
+        let state = *self.data::<PairStorage>();
+        let (token_0, token_1) = (state.token_0, state.token_1);
+        let balance0 = PSP22Ref::balance_of(&token_0, Self::env().account_id());
+        let balance1 = PSP22Ref::balance_of(&token_1, Self::env().account_id());
+        self.internal_update(balance0, balance1)?;
+        Ok(())
+    }
+
+
 
 
 
