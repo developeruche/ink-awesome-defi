@@ -14,7 +14,7 @@ pub trait FactoryController {
     #[ink(message)]
     fn set_fee_to(&mut self, _fee_to: AccountId) -> Result<(), UniswapV2Errors>;
     
-    // this function is used the updated the address thhat can call the set_fee_to function
+    // this function is used the updated the address that can call the set_fee_to function
     #[ink(message)]
     fn set_fee_to_setter(&mut self, _fee_to_setter: AccountId) -> Result<(), UniswapV2Errors>;
 

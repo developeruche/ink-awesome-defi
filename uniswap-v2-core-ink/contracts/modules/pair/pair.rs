@@ -13,7 +13,8 @@ pub mod pair {
     use openbrush::traits::{Hash as HashType, String};
     use openbrush::{traits::Storage, contracts::reentrancy_guard};
     use global::controllers::pair::paircontroller_external;
-
+    use openbrush::modifiers;
+    use crate::pair::reentrancy_guard::non_reentrant;
 
 
     // =========================================
@@ -140,26 +141,31 @@ pub mod pair {
         }
 
         #[ink(message)]
+        #[modifiers(non_reentrant)]
         fn mint(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
            PairImpl::mint(self, _to)
         }
 
         #[ink(message)]
+        #[modifiers(non_reentrant)]
         fn burn(&mut self, _to: AccountId) -> Result<(), UniswapV2Errors> {
            PairImpl::burn(self, _to)
         }
 
         #[ink(message)]
+        #[modifiers(non_reentrant)]
         fn swap(&mut self, _amount0: Balance, _amount1: Balance, _to: AccountId)  -> Result<(), UniswapV2Errors> {
            PairImpl::swap(self, _amount0, _amount1, _to)
         }
 
         #[ink(message)]
+        #[modifiers(non_reentrant)]
         fn skim(&mut self, _to: AccountId)  -> Result<(), UniswapV2Errors> {
            PairImpl::skim(self, _to)
         }
 
         #[ink(message)]
+        #[modifiers(non_reentrant)]
         fn sync(&mut self) -> Result<(), UniswapV2Errors> {
            PairImpl::sync(self)
         }
