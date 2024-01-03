@@ -186,7 +186,7 @@ pub mod pair {
 
 
         #[ink(message)]
-        pub fn get_storeage_hash(&mut self) -> HashType {
+        pub fn get_code_hash(&mut self) -> HashType {
             self.env().own_code_hash().unwrap()
         }
     }
