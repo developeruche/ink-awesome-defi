@@ -21,6 +21,8 @@ pub enum UniswapV2Errors {
     InsufficientAmountOut,
     InvalidToAddress,
     ConstantProductError,
+    InvalidPairAddress,
+    PairAlreadyExists
 }
 
 

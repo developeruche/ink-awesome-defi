@@ -4,6 +4,7 @@
 
 #[ink::contract]
 mod factory {
+    use ink::prelude::vec::Vec;
     use global::providers::common::errors::UniswapV2Errors;
     use global::providers::data::factory::FactoryStorage;
     // use global::controllers::factory::factorycontroller_external;
@@ -11,6 +12,8 @@ mod factory {
     use global::controllers::factory::factorycontroller_external::FactoryController;
     use global::providers::deployables::factory::FactoryImpl;
     use openbrush::traits::Storage;
+    use pair::pair::PairRef;
+    use ink::ToAccountId;
 
 
    
@@ -45,8 +48,47 @@ mod factory {
     impl Factory {
       
         #[ink(constructor)]
-        pub fn new() -> Self {
-            Self::default() 
+        pub fn new(pair_code_hash: [u8; 32]) -> Self {
+            let mut instance = Self::default();
+
+            instance.factory_state.fee_to_setter = Some(Self::env().caller());
+            instance.factory_state.pair_code_hash = pair_code_hash;
+
+
+            instance
+        }
+
+
+
+
+        #[ink(message)]
+        pub fn create_pair(&mut self, token_a: AccountId, token_b: AccountId, salt_bytes: Vec<u8>) -> Result<AccountId, UniswapV2Errors> {
+            let pair = self.factory_state.get_pair.get(&(token_a, token_b));
+            if pair.is_some() {
+                return Err(UniswapV2Errors::PairAlreadyExists);
+            }
+
+            let pair = self.factory_state.get_pair.get(&(token_b, token_a));
+            if pair.is_some() {
+                return Err(UniswapV2Errors::PairAlreadyExists);
+            }
+
+            let hash = self.factory_state.pair_code_hash;
+
+            let pair = PairRef::new(token_a, token_b)
+                .endowment(0)
+                .code_hash(hash.into())
+                .salt_bytes(&salt_bytes)
+                .instantiate();
+
+            let pair_addr = pair.to_account_id();
+
+            self.factory_state.get_pair.insert(&(token_a, token_b), &pair_addr);
+            self.factory_state.get_pair.insert(&(token_b, token_a), &pair_addr);
+
+            self.factory_state.all_pairs.push(pair_addr);
+
+            Ok(pair_addr)
         }
       
       

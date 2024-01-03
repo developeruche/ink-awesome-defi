@@ -4,13 +4,13 @@
 
 #[openbrush::implementation(PSP22, PSP22Permit, Nonces, Ownable, PSP22Metadata)]
 #[openbrush::contract]
-mod pair {
+pub mod pair {
 
     use global::providers::common::errors::UniswapV2Errors;
     use global::providers::data::pair::set_factory;
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     use global::controllers::pair::PairController;
-    use openbrush::traits::Hash as HashType;
+    use openbrush::traits::{Hash as HashType, String};
     use openbrush::{traits::Storage, contracts::reentrancy_guard};
     use global::controllers::pair::paircontroller_external;
 
@@ -168,19 +168,19 @@ mod pair {
 
     impl Pair {
         #[ink(constructor)]
-        pub fn new(total_supply: Balance, name: Option<String>, symbol: Option<String>, decimal: u8, factory: AccountId) -> Self {
+        pub fn new(token_a: AccountId, token_b: AccountId) -> Self {
             let mut instance = Self::default();
             let caller = instance.env().caller();
 
-            instance.metadata.name.set(&name);
-            instance.metadata.symbol.set(&symbol);
-            instance.metadata.decimals.set(&decimal);
+            instance.metadata.name.set(&Some(String::from("Uniswap V2")));
+            instance.metadata.symbol.set(&Some(String::from("UNI-V2")));
+            instance.metadata.decimals.set(&18);
 
-            ownable::Internal::_init_with_owner(&mut instance, Self::env().caller());
-            psp22::Internal::_mint_to(&mut instance, caller, total_supply).expect("Should mint total_supply");
+            ownable::Internal::_init_with_owner(&mut instance, caller);
 
-            set_factory(&mut instance, factory);
+            set_factory(&mut instance, Self::env().account_id());
             
+            PairImpl::initialize(&mut instance, token_a, token_b);
             instance
         }
 

@@ -1468,6 +1468,7 @@ dependencies = [
  "global",
  "ink",
  "openbrush",
+ "pair",
  "parity-scale-codec",
 ]
 
