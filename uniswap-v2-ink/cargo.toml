@@ -8,8 +8,6 @@ edition = "2021"
 ink = { version = "4.2.1", default-features = false }
 
 openbrush = { git = "https://github.com/727-Ventures/openbrush-contracts", version = "4.0.0-beta.1", default-features = false, features = ["psp22","ownable","access_control", "psp34", "reentrancy_guard", "pausable"] }
-contract_1 =  { path = "contracts/modules/contract_1", default-features = false }
-contract_2 =  { path = "contracts/modules/contract_2", default-features = false }
 psp22_lp =  { path = "contracts/modules/psp22_lp", default-features = false }
 pair =  { path = "contracts/modules/pair", default-features = false }
 factory =  { path = "contracts/modules/factory", default-features = false }

@@ -910,31 +910,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "contract_1"
-version = "0.1.0"
-dependencies = [
- "global",
- "ink",
- "openbrush",
- "parity-scale-codec",
-]
-
-[[package]]
-name = "contract_2"
-version = "0.1.0"
-dependencies = [
- "global",
- "ink",
- "openbrush",
- "parity-scale-codec",
-]
-
-[[package]]
 name = "contracts"
 version = "0.1.0"
 dependencies = [
- "contract_1",
- "contract_2",
  "factory",
  "global",
  "ink",
