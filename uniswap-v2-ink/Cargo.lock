@@ -935,6 +935,7 @@ version = "0.1.0"
 dependencies = [
  "contract_1",
  "contract_2",
+ "factory",
  "global",
  "ink",
  "ink_e2e",
@@ -1458,6 +1459,16 @@ checksum = "958e4d70b6d5e81971bebec42271ec641e7ff4e170a6fa605f2b8a8b65cb97d3"
 dependencies = [
  "event-listener 4.0.1",
  "pin-project-lite",
+]
+
+[[package]]
+name = "factory"
+version = "0.1.0"
+dependencies = [
+ "global",
+ "ink",
+ "openbrush",
+ "parity-scale-codec",
 ]
 
 [[package]]

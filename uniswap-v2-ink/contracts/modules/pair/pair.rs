@@ -10,6 +10,7 @@ mod pair {
     use global::providers::data::pair::set_factory;
     use global::providers::{data::pair::PairStorage, deployables::pair::PairImpl};
     use global::controllers::pair::PairController;
+    use openbrush::traits::Hash as HashType;
     use openbrush::{traits::Storage, contracts::reentrancy_guard};
     use global::controllers::pair::paircontroller_external;
 
@@ -181,6 +182,12 @@ mod pair {
             set_factory(&mut instance, factory);
             
             instance
+        }
+
+
+        #[ink(message)]
+        pub fn get_storeage_hash(&mut self) -> HashType {
+            self.env().own_code_hash().unwrap()
         }
     }
 

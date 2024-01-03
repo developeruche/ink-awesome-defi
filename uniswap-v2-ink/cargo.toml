@@ -12,6 +12,7 @@ contract_1 =  { path = "contracts/modules/contract_1", default-features = false 
 contract_2 =  { path = "contracts/modules/contract_2", default-features = false }
 psp22_lp =  { path = "contracts/modules/psp22_lp", default-features = false }
 pair =  { path = "contracts/modules/pair", default-features = false }
+factory =  { path = "contracts/modules/factory", default-features = false }
 global = {path = "contracts", default-features = false}
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
 scale-info = { version = "2.6", default-features = false, features = ["derive"], optional = true }
