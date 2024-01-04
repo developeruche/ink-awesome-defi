@@ -3,6 +3,7 @@ use crate::providers::{data::staking_reward::StakingStorage, common::errors::Sta
 use openbrush::traits::Balance;
 use openbrush::{contracts::{psp22::{psp22, extensions::metadata::PSP22MetadataImpl}, traits::psp22::PSP22Ref}};
 use ink::prelude::vec::Vec;
+use openbrush::modifier_definition;
 
 
 
@@ -240,4 +241,33 @@ pub trait StakingRewardImpl:
         let state = self.data::<StakingStorage>();
         state.reward_rate * state.reward_duration
     }
+
+    fn get_caller(&self) -> AccountId {
+        Self::env().caller()
+    }
 }
+
+
+
+
+
+// ======================================
+// Modifers
+// ======================================
+// #[modifier_definition]
+// pub fn update_reward<T, F, R, E>(instance: &mut T, body: F, is_address_zero: bool) -> Result<R, E>
+//     where T: Storage<StakingStorage> + StakingRewardImpl, F: FnOnce(&mut T) -> Result<R, E>, E: From<StakingRewardsErrors>
+// {
+
+//     let state = instance.data::<StakingStorage>();
+//     let reward_per_token = StakingRewardImpl::reward_per_token(instance);
+//     let last_updated_time = StakingRewardImpl::last_time_reward_applicable(instance);
+
+//     if is_address_zero {
+//         let current_earned = StakingRewardImpl::earned(instance, instance.get_caller());
+//         state.rewards.insert(instance.get_caller(), &current_earned);
+//         state.user_reward_per_token.insert(instance.get_caller(), &reward_per_token);
+//     }
+
+//     body(instance)
+// }
