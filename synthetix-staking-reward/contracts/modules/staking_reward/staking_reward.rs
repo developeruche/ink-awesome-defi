@@ -1,8 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 
 
-#[openbrush::implementation(Ownable)]
-#[openbrush::contract]
+
+#[ink::contract]
 mod staking_reward {
     use ink::prelude::vec::Vec;
     use global::providers::common::errors::StakingRewardsErrors;
@@ -69,13 +69,133 @@ mod staking_reward {
     impl  StakingRewardImpl for StakingReward {}
 
 
-    // impl StakingRewardController for StakingReward {
-    //     #[ink(message)]
-    //     fn total_supply(&mut self) -> Balance {
-    //         StakingRewardImpl::total_supply(self)
-    //     }
-    // }
+    impl StakingRewardController for StakingReward {
+        #[ink(message)]
+        fn total_supply(&self) -> Balance {
+            StakingRewardImpl::total_supply(self)
+        }
 
+        #[ink(message)]
+        fn get_reward_token(&self) -> AccountId {
+            StakingRewardImpl::get_reward_token(self)
+        }
+
+        #[ink(message)]
+        fn get_staked_token(&self) -> AccountId {
+            StakingRewardImpl::get_staked_token(self)
+        }
+
+        #[ink(message)]
+        fn get_reward_rate(&self) -> Balance {
+            StakingRewardImpl::get_reward_rate(self)
+        }
+
+        #[ink(message)]
+        fn get_period_finish(&self) -> Balance {
+            StakingRewardImpl::get_period_finish(self)
+        }
+
+        #[ink(message)]
+        fn get_reward_duration(&self) -> Balance {
+            StakingRewardImpl::get_reward_duration(self)
+        }
+
+        #[ink(message)]
+        fn get_last_update_time(&self) -> Balance {
+            StakingRewardImpl::get_last_update_time(self)
+        }
+
+        #[ink(message)]
+        fn get_reward_per_token_stored(&self) -> Balance {
+            StakingRewardImpl::get_reward_per_token_stored(self)
+        }
+
+        #[ink(message)]
+        fn get_user_reward_per_token_paid(&self, _account: AccountId) -> Balance {
+            StakingRewardImpl::get_user_reward_per_token_paid(self, _account)
+        }
+
+        #[ink(message)]
+        fn get_rewards(&self, _account: AccountId) -> Balance {
+            StakingRewardImpl::get_rewards(self, _account)
+        }
+
+        #[ink(message)]
+        fn balance_of(&self, _account: AccountId) -> Balance {
+            StakingRewardImpl::balance_of(self, _account)
+        }
+
+        #[ink(message)]
+        fn last_time_reward_applicable(&self) -> Balance {
+            StakingRewardImpl::last_time_reward_applicable(self)
+        }
+
+        #[ink(message)]
+        fn reward_per_token(&self) -> Balance {
+            StakingRewardImpl::reward_per_token(self)
+        }
+
+        #[ink(message)]
+        fn earned(&self, _account: AccountId) -> Balance {
+            StakingRewardImpl::earned(self, _account)
+        }
+
+        #[ink(message)]
+        fn get_reward_for_duration(&self) -> Balance {
+            StakingRewardImpl::get_reward_for_duration(self)
+        }
+
+
+
+
+
+        #[ink(message)]
+        fn stake(&mut self, _amount: Balance) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::stake(self, _amount)
+        }
+
+        #[ink(message)]
+        fn withdraw(&mut self, _amount: Balance) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::withdraw(self, _amount)
+        }
+
+        #[ink(message)]
+        fn get_reward(&mut self) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::get_reward(self)
+        }
+
+        #[ink(message)]
+        fn exit(&mut self) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::exit(self)
+        }
+
+        #[ink(message)]
+        fn notify_reward_amount(&mut self, _reward: Balance) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::notify_reward_amount(self, _reward)
+        }
+
+        #[ink(message)]
+        fn recover_erc20(&mut self, _token: AccountId, _amount: Balance) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::recover_erc20(self, _token, _amount)
+        }
+
+        #[ink(message)]
+        fn set_reward_duration(&mut self, _duration: Balance) -> Result<(), StakingRewardsErrors> {
+            StakingRewardImpl::set_reward_duration(self, _duration)
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     impl StakingReward {
       
         #[ink(constructor)]
@@ -83,7 +203,7 @@ mod staking_reward {
             let mut instance = Self::default();
 
 
-            ownable::Internal::_init_with_owner(&mut instance, _owner);
+            instance.staking_state.admin = _owner;
             instance.staking_state.staked_token = _staked_token;
             instance.staking_state.reward_token = _reward_token;
 
@@ -91,15 +211,6 @@ mod staking_reward {
             instance
         }
 
-
-
-
-        #[ink(message)]
-        pub fn create_pair(&mut self, token_a: AccountId, token_b: AccountId, salt_bytes: Vec<u8>) -> Result<AccountId, StakingRewardsErrors> {
-            todo!()
-        }
-      
-      
     }
 
 }
