@@ -135,7 +135,26 @@ pub trait StakingRewardImpl:
         Ok(())
     }
 
+    fn set_reward_duration(&mut self, _duration: Balance) -> Result<(), StakingRewardsErrors> {
+        let state = self.data::<StakingStorage>();
+        let caller = Self::env().caller();
 
+        // remove this whe you plug in the modifer
+        if caller != state.admin {
+            return Err(StakingRewardsErrors::NotAdmin);
+        }
+
+        if _duration <= 0 {
+            return Err(StakingRewardsErrors::InvalidAmount);
+        }
+
+        if (Self::env().block_timestamp() as u128) < state.period_to_finish {
+            return Err(StakingRewardsErrors::StakingStillInProgress);
+        }
+
+        state.reward_duration = _duration;
+        Ok(())
+    }
 
 
 
