@@ -255,6 +255,7 @@ pub trait StakingRewardImpl:
 // ======================================
 // Modifers
 // ======================================
+//TODO: move this logic into the trait... modifer_definition! macro does not accept abr data
 // #[modifier_definition]
 // pub fn update_reward<T, F, R, E>(instance: &mut T, body: F, is_address_zero: bool) -> Result<R, E>
 //     where T: Storage<StakingStorage> + StakingRewardImpl, F: FnOnce(&mut T) -> Result<R, E>, E: From<StakingRewardsErrors>
