@@ -21,7 +21,11 @@ pub enum StakingRewardsErrors {
     NotEnoughAllowance,
     TokenTransferFailed,
     Overflow,
-    StakingStillInProgress
+    StakingStillInProgress,
+    InvalidAmount,
+    ProviderRewardIsToLarge,
+    CannotWithdrawRewardToken,
+    CannotWithdrawStakedToken,
 }
 
 

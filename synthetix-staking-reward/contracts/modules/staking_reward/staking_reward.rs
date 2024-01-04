@@ -1,15 +1,17 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 
 
-
-#[ink::contract]
+#[openbrush::implementation(Ownable)]
+#[openbrush::contract]
 mod staking_reward {
     use ink::prelude::vec::Vec;
     use global::providers::common::errors::StakingRewardsErrors;
     use global::providers::data::staking_reward::StakingStorage;
     use global::controllers::staking_reward::stakingrewardcontroller_external::StakingRewardController;
     use global::providers::deployables::staking_reward::StakingRewardImpl;
+    use openbrush::contracts::ownable;
     use openbrush::traits::Storage;
+    use global::controllers::staking_reward::stakingrewardcontroller_external;
    
 
 
@@ -21,7 +23,8 @@ mod staking_reward {
     pub struct StakingReward {
         #[storage_field]
         pub staking_state: StakingStorage,
-
+        #[storage_field]
+        ownable: ownable::Data,
     }
 
 
@@ -66,21 +69,23 @@ mod staking_reward {
     impl  StakingRewardImpl for StakingReward {}
 
 
-    impl StakingRewardController for StakingReward {
-        #[ink(message)]
-        fn total_supply(&mut self) -> Balance {
-            StakingRewardImpl::total_supply(self)
-        }
-    }
+    // impl StakingRewardController for StakingReward {
+    //     #[ink(message)]
+    //     fn total_supply(&mut self) -> Balance {
+    //         StakingRewardImpl::total_supply(self)
+    //     }
+    // }
 
     impl StakingReward {
       
         #[ink(constructor)]
-        pub fn new(pair_code_hash: [u8; 32]) -> Self {
+        pub fn new(_owner: AccountId, _reward_token: AccountId, _staked_token: AccountId) -> Self {
             let mut instance = Self::default();
 
-            // instance.factory_state.fee_to_setter = Some(Self::env().caller());
-            // instance.factory_state.pair_code_hash = pair_code_hash;
+
+            ownable::Internal::_init_with_owner(&mut instance, _owner);
+            instance.staking_state.staked_token = _staked_token;
+            instance.staking_state.reward_token = _reward_token;
 
 
             instance
