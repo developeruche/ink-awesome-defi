@@ -1,3 +1,4 @@
+use core::cell::RefCell;
 use openbrush::{traits::{Storage, AccountId}, contracts::ownable::OwnableError};
 use crate::providers::{data::staking_reward::StakingStorage, common::errors::StakingRewardsErrors}; 
 use openbrush::traits::Balance;
@@ -259,7 +260,9 @@ pub trait StakingRewardImpl:
 //     where T: Storage<StakingStorage> + StakingRewardImpl, F: FnOnce(&mut T) -> Result<R, E>, E: From<StakingRewardsErrors>
 // {
 
-//     let state = instance.data::<StakingStorage>();
+//     let instance_ = RefCell::new(instance);
+//     let mut instance_1 = instance_.borrow_mut();
+//     let state = instance_1.data::<StakingStorage>();
 //     let reward_per_token = StakingRewardImpl::reward_per_token(instance);
 //     let last_updated_time = StakingRewardImpl::last_time_reward_applicable(instance);
 
