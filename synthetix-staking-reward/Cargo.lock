@@ -913,15 +913,14 @@ dependencies = [
 name = "contracts"
 version = "0.1.0"
 dependencies = [
- "factory",
  "global",
  "ink",
  "ink_e2e",
  "openbrush",
- "pair",
  "parity-scale-codec",
  "psp22_lp",
  "scale-info",
+ "staking_reward",
 ]
 
 [[package]]
@@ -1437,17 +1436,6 @@ checksum = "958e4d70b6d5e81971bebec42271ec641e7ff4e170a6fa605f2b8a8b65cb97d3"
 dependencies = [
  "event-listener 4.0.1",
  "pin-project-lite",
-]
-
-[[package]]
-name = "factory"
-version = "0.1.0"
-dependencies = [
- "global",
- "ink",
- "openbrush",
- "pair",
- "parity-scale-codec",
 ]
 
 [[package]]
@@ -3039,16 +3027,6 @@ checksum = "0ae859aa07428ca9a929b936690f8b12dc5f11dd8c6992a18ca93919f28bc177"
 dependencies = [
  "libc",
  "windows-sys 0.48.0",
-]
-
-[[package]]
-name = "pair"
-version = "0.1.0"
-dependencies = [
- "global",
- "ink",
- "openbrush",
- "parity-scale-codec",
 ]
 
 [[package]]
@@ -4685,6 +4663,16 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+
+[[package]]
+name = "staking_reward"
+version = "0.1.0"
+dependencies = [
+ "global",
+ "ink",
+ "openbrush",
+ "parity-scale-codec",
+]
 
 [[package]]
 name = "static_assertions"

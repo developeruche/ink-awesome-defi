@@ -1,2 +1,1 @@
-pub mod pair;
-pub mod factory;
+pub mod staking_reward;
