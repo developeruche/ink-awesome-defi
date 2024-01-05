@@ -12,4 +12,4 @@ My hopes for this Repo is for it to be a good resource for engineers/teams looki
 
 
 ## Want to contribute?
-My buddy [Ayo](https://github.com/Adebara123), built a template which I used to build these smart contracts and I would be employing you contributor to use that also.
+My buddy [Ayo](https://github.com/Adebara123), built a [template](https://github.com/Adebara123/Ink-Contract-Template) which I used to build these smart contracts and I would be employing you contributor to use that also.
